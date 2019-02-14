@@ -1,4 +1,4 @@
-FROM rocker/tf:cpu
+FROM rocker/tf:devel
 
 # Python Xgboost for CPU
 RUN pip3 install \

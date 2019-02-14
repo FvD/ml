@@ -1,4 +1,4 @@
-FROM rocker/tidyverse:3.5.2
+FROM ubuntu:18.04 
 
 ########## base ###############################################
 RUN apt-get update && apt-get install -y --no-install-recommends gnupg2 curl ca-certificates && \
@@ -12,6 +12,8 @@ ENV CUDA_VERSION 10.0.130
 
 ENV CUDA_PKG_VERSION 10-0=$CUDA_VERSION-1
 # For libraries in the cuda-compat-* package: https://docs.nvidia.com/cuda/eula/index.html#attachment-a
+RUN apt update
+ 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         cuda-cudart-$CUDA_PKG_VERSION \
         cuda-compat-10-0=410.48-1 && \
