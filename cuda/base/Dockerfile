@@ -1,4 +1,4 @@
-FROM ubuntu:18.04 
+FROM rocker/tidyverse:devel 
 
 ########## base ###############################################
 RUN apt-get update && apt-get install -y --no-install-recommends gnupg2 curl ca-certificates && \
@@ -11,9 +11,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends gnupg2 curl ca-
 ENV CUDA_VERSION 10.0.130
 
 ENV CUDA_PKG_VERSION 10-0=$CUDA_VERSION-1
-# For libraries in the cuda-compat-* package: https://docs.nvidia.com/cuda/eula/index.html#attachment-a
+
+## No idea why apt update hangs afte rthe above sources have been added... probably bad to add those to debian:9?
 RUN apt update
  
+# For libraries in the cuda-compat-* package: https://docs.nvidia.com/cuda/eula/index.html#attachment-a
 RUN apt-get update && apt-get install -y --no-install-recommends \
         cuda-cudart-$CUDA_PKG_VERSION \
         cuda-compat-10-0=410.48-1 && \
