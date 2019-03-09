@@ -73,11 +73,12 @@ RUN echo "rsession-ld-library-path=$LD_LIBRARY_PATH" | tee -a /etc/rstudio/rserv
          \nCUDA_HOME=$CUDA_HOME \
          \nCUDA_PATH=$CUDA_PATH \
          \nPATH=$PATH" >> /usr/local/lib/R/etc/Renviron
+RUN echo "NVBLAS_LOGFILE nvblas.log \
+          \nNVBLAS_CPU_BLAS_LIB /usr/lib/libopenblas.so \
+          \nNVBLAS_GPU_LIST ALL" > /etc/nvblas.conf
 
 ## Allow R to use CUDA for BLAS, with fallback on openblas
-ENV LD_PRELOAD=/usr/local/cuda/lib64/libnvblas.so.$CUDA_VERSION
+ENV NVBLAS_LOGFILE=/var/log/nvblas.log
 ENV NVBLAS_CONFIG_FILE=/etc/nvblas.conf
-RUN echo "NVBLAS_LOGFILE nvblas.log \
-          \nNVBLAS_CPU_BLAS_LIB /usr/lib/libopenblas.so
-          \nNVBLAS_GPU_LIST ALL" > /etc/nvblas.conf
+ENV LD_PRELOAD=/usr/local/cuda/lib64/libnvblas.so.$CUDA_VERSION
 
