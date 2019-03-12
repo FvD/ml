@@ -73,8 +73,7 @@ RUN echo "rsession-ld-library-path=$LD_LIBRARY_PATH" | \
     echo "\n\
           \nCUDA_HOME=$CUDA_HOME \
           \nCUDA_PATH=$CUDA_PATH \
-          \nPATH=$PATH \
-          \nLD_PRELOAD=/usr/local/cuda/lib64/libnvblas.so.$CUDA_VERSION" \
+          \nPATH=$PATH" \
           >> /usr/local/lib/R/etc/Renviron
 
 ## Allow R to use CUDA for BLAS, with fallback on openblas
@@ -83,5 +82,26 @@ RUN echo "NVBLAS_LOGFILE nvblas.log \
           \nNVBLAS_GPU_LIST ALL" > /etc/nvblas.conf
 
 ENV NVBLAS_CONFIG_FILE=/etc/nvblas.conf
+
+## We don't want to set LD_PRELOAD globally
+ENV CUDA_BLAS=/usr/local/cuda/lib64/libnvblas.so.$CUDA_VERSION
+
+RUN mv /usr/local/bin/R /usr/local/bin/R_ && \
+    mv /usr/local/bin/Rscript /usr/local/bin/Rscript_ && \
+    echo "#!/bin/sh
+          \nLD_PRELOAD=$CUDA_BLAS /usr/local/bin/R_ \"\$@\"" \
+		  > /usr/local/bin/R && \
+	chmod +x /usr/local/bin/R && \
+    echo "#!/bin/sh
+          \nLD_PRELOAD=$CUDA_BLAS /usr/local/bin/Rscript_ \"\$@\"" \
+		  > /usr/local/bin/Rscript && \
+	chmod +x /usr/local/bin/Rscript
+
+RUN echo "#!/usr/bin/with-contenv bash \
+          \n## load /etc/environment vars first: \
+  		  \n for line in \$( cat /etc/environment ) ; do export \$line ; done \
+		  \n export$LD_PRELOAD=$CUDA_BLAS \
+          \n exec /usr/lib/rstudio-server/bin/rserver --server-daemonize 0" \
+          > /etc/services.d/rstudio/run
 
 
