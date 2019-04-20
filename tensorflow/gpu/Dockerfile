@@ -27,7 +27,7 @@ RUN pip3 install \
     pyyaml==3.13 \
     requests==2.21.0 \
     Pillow==5.4.1 \
-    tensorflow-gpu==1.12.0 \
+    tensorflow-gpu==1.13.1 \
     keras==2.2.4 \
     --no-cache-dir \
   && install2.r keras
