@@ -26,6 +26,9 @@ RUN apt-get update && apt-get -y install wget && \
 
 COPY --from=0 /usr/local/lib/R/site-library/xgboost /usr/local/lib/R/site-library/xgboost
 
+## We need the dev libraries for some applications
+COPY --from=0 /usr/local/cuda-9.2/ /usr/local/cuda-9.2/
+
 # Get Java (for h2o R package)
 RUN apt-get update -qq && \
     apt-get -y --no-install-recommends install \
