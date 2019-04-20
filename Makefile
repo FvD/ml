@@ -4,15 +4,13 @@ all:
 	make ml-img
 
 cuda-img: cuda/base/Dockerfile cuda/devel/Dockerfile 
-	docker build -t rocker/cuda:devel cuda/base
-	docker build -t rocker/cuda-dev:devel cuda/devel
+	docker build -t rocker/cuda-10.1 cuda/base
+	docker build -t rocker/cuda-10.1-dev cuda/devel
 
-tf-img: tf/cpu/Dockerfile tf/gpu/Dockerfile
-	docker build -t rocker/tf:devel tf/cpu
-	docker build -t rocker/tf-gpu:devel tf/gpu
+tf-img: tensorflow/gpu/Dockerfile
+	docker build -t rocker/tensorflow-gpu-10.1 tensorflow/gpu
 
-ml-img: ml/gpu/Dockerfile ml/cpu/Dockerfile
-	docker build -t rocker/ml:devel ml/cpu
-	docker build -t rocker/ml-gpu:devel ml/gpu
+ml-img: ml/gpu/Dockerfile 
+	docker build -t rocker/ml-gpu-10.1 ml/gpu
 
 

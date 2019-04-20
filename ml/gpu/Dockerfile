@@ -1,4 +1,4 @@
-FROM rocker/tensorflow-gpu:devel
+FROM rocker/tensorflow-gpu-10.1
 
 # Python Xgboost for CPU
 RUN pip3 install \

@@ -1,4 +1,4 @@
-FROM rocker/cuda:devel
+FROM rocker/cuda-10.1
 
 # Set up env variables in R
 ENV CUDA_HOME=/usr/local/cuda
